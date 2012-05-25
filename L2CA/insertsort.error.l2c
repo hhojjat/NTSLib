@@ -1,0 +1,30 @@
+pointer l;
+pointer L;
+pointer i, pi, pn;
+
+L = null;
+
+if (void) then
+	L = l;
+	l = l.next;
+	L.next = null;
+fi
+
+while (! (l == null)) do
+	i = l;
+	l = l.next;
+	if ( void ) then
+		i.next = L;
+		L = i;
+	else 
+		pi = L;
+		while (void) do
+			pn = pi.next;
+			if (! (pn == null) ) then
+				pi = pi.next ;
+			fi
+		od
+		i.next = pi.next;
+		pi.next = i;
+	fi
+od

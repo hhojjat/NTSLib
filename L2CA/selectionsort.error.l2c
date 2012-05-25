@@ -1,0 +1,36 @@
+pointer l; // the list to be sorted 
+pointer L, t; // the result
+pointer min, pmin;
+pointer i, pi;
+
+L = null;
+
+if (! (l==null) ) then
+	L = l;
+	t = l;
+	l = l.next;
+	t.next = null;
+fi
+
+while (! (l == null) ) do
+	min = l;  
+	pmin = null;
+	i = l.next; 
+	pi = l;
+	while (! (i == null) ) do
+		if ( void ) then 
+			min = i; 
+			pmin = pi;
+		fi
+		pi = i;
+		i = i.next;
+	od
+	if ( void ) then
+		pmin.next = min.next;
+	else
+		l = l.next;
+	fi
+	t.next = min;
+	t = t.next;
+	t.next = null;
+od

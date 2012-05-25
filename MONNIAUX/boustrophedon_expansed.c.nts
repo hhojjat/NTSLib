@@ -1,0 +1,74 @@
+nts boustrophedon_expansed;
+ 
+main{
+
+__nts__naffected_ret_val_,validity____nts__naffected_ret_val__,validity____retres_,validity__d_,validity__x_,__ndet_cond__,__if_ndet_cond__,_ndet_arg_4,_ndet_arg_3,_ndet_arg_2,_ndet_arg_1,_ndet_arg_0,__retres,d,x : int ;
+
+ out ret_val_, validity__ret_val__  : int;
+initial sinit ;
+
+error s1,s3,s10,s11,s13,s14,s17,s20,s22; sinit->s0 {  } 
+ s0->s2 { x'=0 and havoc(x) } 
+ s2->s4 { d'=1 and havoc(d) } 
+ s4->s5 { havoc() } 
+ s5->s6 { havoc() } 
+ s6->s7 { havoc() } 
+ s7->s8 { havoc() } 
+ s8->s9 { 0 <=  x and havoc() } 
+ s8->sinter0 { 0 > x and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter0->s11 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,10,1,_ndet_arg_2,1) and havoc() } 
+ s8->sinter1 { 0 > x and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter1->s11 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,10,1,_ndet_arg_2,1) and havoc() } 
+ s9->s12 { x <=  1000 and havoc() } 
+ s9->sinter2 { x > 1000 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter2->s14 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,10,1,_ndet_arg_2,1) and havoc() } 
+ s9->sinter3 { x > 1000 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter3->s14 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,10,1,_ndet_arg_2,1) and havoc() } 
+ s12->s15 { x > 0 and havoc() } 
+ s12->s16 { x <=  0 and havoc() } 
+ s15->s18 { x'=x+d and x > 1000 and havoc(x) } 
+ s15->s19 { x <=  1000 and havoc() } 
+ s16->s15 { x < 0 and havoc() } 
+ s16->s21 { d'=1 and x >= 0 and havoc(d) } 
+ s18->s6 { havoc() } 
+ s19->s18 { x'=x+d and x < 1000 and havoc(x) } 
+ s19->s23 { d'=-1 and x >= 1000 and havoc(d) } 
+ s21->s15 { havoc() } 
+ s23->s18 { x'=x+d and havoc(x) }
+}
+__assert_fail{
+in a,b,c,d,e,f,g,h : int;
+initial sinit ;
+error s0;
+sinit->s0 { true and havoc() }
+}
+
+NonDetInt{
+out ndet, validity_ndet_: int;
+initial sinit;
+final s1;
+
+sinit->s0{ havoc(ndet,  validity_ndet_)}
+s0->s1{havoc()}
+
+}
+
+__VERIFIER_nondet_int{
+out ndet, validity_ndet_: int;
+initial sinit;
+final s1;
+
+sinit->s0{ havoc(ndet,  validity_ndet_)}
+s0->s1{havoc()}
+
+}
+
+__NdetValInRange {
+ out ndval, ndvalid : int;
+ in lowerb, lbval, upperb, upbval : int;
+ initial sinit;
+ final s1;
+
+ sinit->s1 { ndval' <= upperb and ndval' >= lowerb and ndvalid'=1 and havoc(ndval, ndvalid) }
+
+}

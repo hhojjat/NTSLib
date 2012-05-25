@@ -1,0 +1,33 @@
+pointer l, i, pi, j, t;
+int sorted;
+
+if (! (l==null)) then
+	t = l.next;
+	if (! (t == null)) then
+		sorted = 0; 
+		while (sorted == 0) do 
+			sorted = 1;
+			pi = null;
+			i = l;
+			j = l.next;
+			while (void) do
+				if (void) then
+					t = j.next;
+					i.next = t;
+					j.next = i;				
+					i = j;
+					j = j.next;
+					if (pi == null) then
+						l = i;
+					else
+						pi.next = i;
+					fi
+					sorted = 0;
+				fi
+				pi = i;
+				i = j;
+				j = j.next;
+			od
+		 od
+	 fi
+fi

@@ -1,0 +1,327 @@
+nts pgm;
+
+// Global Decls
+END_l1_prime_END, INIT_PC11_prime_END, PC13, PC14, PC2, PC20, PC23, cmain, cpost_async1_with_err, cpost_async1_without_err, l1, main_without_err: int;
+CNT_cpost_async1: int;
+MI_b__0: int;
+MF_b__0: int;
+
+MI_b__1: int;
+MF_b__1: int;
+
+main {
+b, res: int;
+nxt_b: int;
+initial si;
+final sf;
+error se;
+
+si -> s0 { b' >= 0 && b' <= 1 &&  END_l1_prime_END' = 0 && INIT_PC11_prime_END' = 0 && PC13' = 0 && PC14' = 0 && PC2' = 0 && PC20' = 0 && PC23' = 0 && cmain' = 0 && cpost_async1_with_err' = 0 && cpost_async1_without_err' = 0 && l1' = 0 && main_without_err' = 0 && CNT_cpost_async1' = 0 && havoc(b, END_l1_prime_END, INIT_PC11_prime_END, PC13, PC14, PC2, PC20, PC23, cmain, cpost_async1_with_err, cpost_async1_without_err, l1, main_without_err, CNT_cpost_async1)}
+s0 -> s1 { main_without_err' = main_without_err + 1 &&
+       MI_b__1' = b && MF_b__1' = nxt_b' && nxt_b' >= 0 && nxt_b' <= 1 && 
+       havoc (main_without_err, MI_b__1, MF_b__1, nxt_b) }
+s1 -> s2_1 { res' = traverse_main_without_err_1() && havoc(res) }
+s2_1 -> eventloop { res = 1 && res' = 0 && b' = nxt_b &&  havoc(res, b) }
+
+eventloop -> sf { CNT_cpost_async1 = 0 && havoc() }
+eventloop -> s3 { CNT_cpost_async1 >= 1 && CNT_cpost_async1' = CNT_cpost_async1 - 1 && havoc(CNT_cpost_async1) }
+
+s3 -> s4 { cpost_async1_with_err' = cpost_async1_with_err + 1 &&
+           MI_b__1' = b && MF_b__1' = nxt_b' && nxt_b' >= 0 && nxt_b' <= 1 && 
+           havoc(cpost_async1_with_err, MI_b__1, MF_b__1, nxt_b) }
+
+s4 -> se_4 { res' = traverse_cpost_async1_with_err_1() && havoc(res) }
+se_4 -> se { res = 1 && res' = 0 && b' = nxt_b &&  havoc(res, b) }
+
+s3 -> s5 { cpost_async1_without_err' = cpost_async1_without_err + 1 &&
+           MI_b__1' = b && MF_b__1' = nxt_b' && nxt_b' >= 0 && nxt_b' <= 1 && 
+           havoc(cpost_async1_without_err, MI_b__1, MF_b__1, nxt_b) }
+
+s5 -> s2_5 { res' = traverse_cpost_async1_without_err_1() && havoc(res) }
+s2_5 -> eventloop { b' = nxt_b &&  havoc(b) }
+
+}
+
+//----------------------------------
+// Grammar of main_without_err
+// <PC2> -> 'e'
+// <PC20> -> 'cpost_async1' <PC23>
+// <PC23> -> 'e'
+// <cmain> -> 'b := T' <PC20>
+// <main_without_err> -> <cmain> <PC2>
+//----------------------------------
+traverse_main_without_err_0 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { PC2 >= 1 && havoc() }
+si -> p1 { PC20 >= 1 && havoc() }
+si -> p2 { PC23 >= 1 && havoc() }
+si -> p3 { cmain >= 1 && havoc() }
+si -> p4 { main_without_err >= 1 && havoc() }
+
+
+// <PC2> -> 'e'
+p0 -> sf { PC2' = PC2 - 1 && done' = 1 &&
+       	MI_b__0 = MF_b__0 && 
+       	havoc(PC2, done) }
+
+// <PC20> -> 'cpost_async1' <PC23>
+p1 -> si { CNT_cpost_async1' = CNT_cpost_async1 + 1  && PC20' = PC20 - 1 && PC23' = PC23 + 1 &&
+        havoc(CNT_cpost_async1, PC20, PC23) }
+
+// <PC23> -> 'e'
+p2 -> sf { PC23' = PC23 - 1 && done' = 1 &&
+       	MI_b__0 = MF_b__0 && 
+       	havoc(PC23, done) }
+
+// <cmain> -> 'b := T' <PC20>
+p3 -> si { MI_b__0' = 1 && cmain' = cmain - 1 && PC20' = PC20 + 1 &&
+        havoc(MI_b__0, cmain, PC20) }
+
+// <main_without_err> -> <cmain> <PC2> 
+p4 -> p4_0 {0 >= 1 &&
+        MF_b__0' = MF_b__0 && MF_b__0' = MI_b__0' && MI_b__0' >= 0 && MI_b__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && PC2' = PC2 + 1 &&
+        havoc(MF_b__0, MF_b__0, MI_b__0,  main_without_err, PC2) }
+
+p4_0 -> si4_0 { res' = 1 && havoc(res) }
+
+si4_0 -> si { res = 1 && res' = 0 && cmain' = cmain + 1 && 
+        havoc(res, cmain) }
+
+p4 -> p4_1 {0 >= 1 &&
+        MI_b__0' = MI_b__0 && MI_b__0' = MF_b__0' && MF_b__0' >= 0 && MF_b__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && cmain' = cmain + 1 &&
+        havoc(MI_b__0, MI_b__0, MF_b__0,  main_without_err, cmain) }
+
+p4_1 -> si4_1 { res' = 1 &&  havoc(res) }
+
+si4_1 -> si { res = 1 && res' = 0 && PC2' = PC2 + 1 &&
+        havoc(res, PC2) }
+
+
+}
+
+//----------------------------------
+// Grammar of main_without_err
+// <PC2> -> 'e'
+// <PC20> -> 'cpost_async1' <PC23>
+// <PC23> -> 'e'
+// <cmain> -> 'b := T' <PC20>
+// <main_without_err> -> <cmain> <PC2>
+//----------------------------------
+traverse_main_without_err_1 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { PC2 >= 1 && havoc() }
+si -> p1 { PC20 >= 1 && havoc() }
+si -> p2 { PC23 >= 1 && havoc() }
+si -> p3 { cmain >= 1 && havoc() }
+si -> p4 { main_without_err >= 1 && havoc() }
+
+
+// <PC2> -> 'e'
+p0 -> sf { PC2' = PC2 - 1 && done' = 1 &&
+       	MI_b__1 = MF_b__1 && 
+       	havoc(PC2, done) }
+
+// <PC20> -> 'cpost_async1' <PC23>
+p1 -> si { CNT_cpost_async1' = CNT_cpost_async1 + 1  && PC20' = PC20 - 1 && PC23' = PC23 + 1 &&
+        havoc(CNT_cpost_async1, PC20, PC23) }
+
+// <PC23> -> 'e'
+p2 -> sf { PC23' = PC23 - 1 && done' = 1 &&
+       	MI_b__1 = MF_b__1 && 
+       	havoc(PC23, done) }
+
+// <cmain> -> 'b := T' <PC20>
+p3 -> si { MI_b__1' = 1 && cmain' = cmain - 1 && PC20' = PC20 + 1 &&
+        havoc(MI_b__1, cmain, PC20) }
+
+// <main_without_err> -> <cmain> <PC2> 
+p4 -> p4_0 {1 >= 1 &&
+        MF_b__0' = MF_b__1 && MF_b__1' = MI_b__0' && MI_b__0' >= 0 && MI_b__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && PC2' = PC2 + 1 &&
+        havoc(MF_b__0, MF_b__1, MI_b__0,  main_without_err, PC2) }
+
+p4_0 -> si4_0 { res' = traverse_main_without_err_0() && havoc(res) }
+
+si4_0 -> si { res = 1 && res' = 0 && cmain' = cmain + 1 && 
+        havoc(res, cmain) }
+
+p4 -> p4_1 {1 >= 1 &&
+        MI_b__0' = MI_b__1 && MI_b__1' = MF_b__0' && MF_b__0' >= 0 && MF_b__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && cmain' = cmain + 1 &&
+        havoc(MI_b__0, MI_b__1, MF_b__0,  main_without_err, cmain) }
+
+p4_1 -> si4_1 { res' = traverse_main_without_err_0() &&  havoc(res) }
+
+si4_1 -> si { res = 1 && res' = 0 && PC2' = PC2 + 1 &&
+        havoc(res, PC2) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_async1_with_err
+// <END_l1_prime_END> -> 'e'
+// <INIT_PC11_prime_END> -> 'assert (F)'
+// <INIT_PC11_prime_END> -> 'assert (F)' <END_l1_prime_END>
+// <cpost_async1_with_err> -> 'assert(b)' <INIT_PC11_prime_END>
+//----------------------------------
+traverse_cpost_async1_with_err_0 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { END_l1_prime_END >= 1 && havoc() }
+si -> p1 { INIT_PC11_prime_END >= 1 && havoc() }
+si -> p2 { cpost_async1_with_err >= 1 && havoc() }
+
+
+// <END_l1_prime_END> -> 'e'
+p0 -> sf { END_l1_prime_END' = END_l1_prime_END - 1 && done' = 1 &&
+       	MI_b__0 = MF_b__0 && 
+       	havoc(END_l1_prime_END, done) }
+
+// <INIT_PC11_prime_END> -> 'assert (F)'
+p1 -> sf { 1 = 1 && INIT_PC11_prime_END' = INIT_PC11_prime_END - 1 && done' = 1 &&
+        MI_b__0 = MF_b__0 && 
+        havoc(INIT_PC11_prime_END, done) }
+
+// <INIT_PC11_prime_END> -> 'assert (F)' <END_l1_prime_END>
+p1 -> si { 1 = 1 && INIT_PC11_prime_END' = INIT_PC11_prime_END - 1 && END_l1_prime_END' = END_l1_prime_END + 1 &&
+        havoc(INIT_PC11_prime_END, END_l1_prime_END) }
+
+// <cpost_async1_with_err> -> 'assert(b)' <INIT_PC11_prime_END>
+p2 -> si { MI_b__0 = 1 && cpost_async1_with_err' = cpost_async1_with_err - 1 && INIT_PC11_prime_END' = INIT_PC11_prime_END + 1 &&
+        havoc(cpost_async1_with_err, INIT_PC11_prime_END) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_async1_with_err
+// <END_l1_prime_END> -> 'e'
+// <INIT_PC11_prime_END> -> 'assert (F)'
+// <INIT_PC11_prime_END> -> 'assert (F)' <END_l1_prime_END>
+// <cpost_async1_with_err> -> 'assert(b)' <INIT_PC11_prime_END>
+//----------------------------------
+traverse_cpost_async1_with_err_1 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { END_l1_prime_END >= 1 && havoc() }
+si -> p1 { INIT_PC11_prime_END >= 1 && havoc() }
+si -> p2 { cpost_async1_with_err >= 1 && havoc() }
+
+
+// <END_l1_prime_END> -> 'e'
+p0 -> sf { END_l1_prime_END' = END_l1_prime_END - 1 && done' = 1 &&
+       	MI_b__1 = MF_b__1 && 
+       	havoc(END_l1_prime_END, done) }
+
+// <INIT_PC11_prime_END> -> 'assert (F)'
+p1 -> sf { 1 = 1 && INIT_PC11_prime_END' = INIT_PC11_prime_END - 1 && done' = 1 &&
+        MI_b__1 = MF_b__1 && 
+        havoc(INIT_PC11_prime_END, done) }
+
+// <INIT_PC11_prime_END> -> 'assert (F)' <END_l1_prime_END>
+p1 -> si { 1 = 1 && INIT_PC11_prime_END' = INIT_PC11_prime_END - 1 && END_l1_prime_END' = END_l1_prime_END + 1 &&
+        havoc(INIT_PC11_prime_END, END_l1_prime_END) }
+
+// <cpost_async1_with_err> -> 'assert(b)' <INIT_PC11_prime_END>
+p2 -> si { MI_b__1 = 1 && cpost_async1_with_err' = cpost_async1_with_err - 1 && INIT_PC11_prime_END' = INIT_PC11_prime_END + 1 &&
+        havoc(cpost_async1_with_err, INIT_PC11_prime_END) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_async1_without_err
+// <PC13> -> 'b := F' <PC14>
+// <PC14> -> 'e'
+// <cpost_async1_without_err> -> 'assert(!b)' <l1>
+// <l1> -> 'cpost_async1' <PC13>
+//----------------------------------
+traverse_cpost_async1_without_err_0 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { PC13 >= 1 && havoc() }
+si -> p1 { PC14 >= 1 && havoc() }
+si -> p2 { cpost_async1_without_err >= 1 && havoc() }
+si -> p3 { l1 >= 1 && havoc() }
+
+
+// <PC13> -> 'b := F' <PC14>
+p0 -> si { MI_b__0' = 0 && PC13' = PC13 - 1 && PC14' = PC14 + 1 &&
+        havoc(MI_b__0, PC13, PC14) }
+
+// <PC14> -> 'e'
+p1 -> sf { PC14' = PC14 - 1 && done' = 1 &&
+       	MI_b__0 = MF_b__0 && 
+       	havoc(PC14, done) }
+
+// <cpost_async1_without_err> -> 'assert(!b)' <l1>
+p2 -> si { MI_b__0 = 0 && cpost_async1_without_err' = cpost_async1_without_err - 1 && l1' = l1 + 1 &&
+        havoc(cpost_async1_without_err, l1) }
+
+// <l1> -> 'cpost_async1' <PC13>
+p3 -> si { CNT_cpost_async1' = CNT_cpost_async1 + 1  && l1' = l1 - 1 && PC13' = PC13 + 1 &&
+        havoc(CNT_cpost_async1, l1, PC13) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_async1_without_err
+// <PC13> -> 'b := F' <PC14>
+// <PC14> -> 'e'
+// <cpost_async1_without_err> -> 'assert(!b)' <l1>
+// <l1> -> 'cpost_async1' <PC13>
+//----------------------------------
+traverse_cpost_async1_without_err_1 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { PC13 >= 1 && havoc() }
+si -> p1 { PC14 >= 1 && havoc() }
+si -> p2 { cpost_async1_without_err >= 1 && havoc() }
+si -> p3 { l1 >= 1 && havoc() }
+
+
+// <PC13> -> 'b := F' <PC14>
+p0 -> si { MI_b__1' = 0 && PC13' = PC13 - 1 && PC14' = PC14 + 1 &&
+        havoc(MI_b__1, PC13, PC14) }
+
+// <PC14> -> 'e'
+p1 -> sf { PC14' = PC14 - 1 && done' = 1 &&
+       	MI_b__1 = MF_b__1 && 
+       	havoc(PC14, done) }
+
+// <cpost_async1_without_err> -> 'assert(!b)' <l1>
+p2 -> si { MI_b__1 = 0 && cpost_async1_without_err' = cpost_async1_without_err - 1 && l1' = l1 + 1 &&
+        havoc(cpost_async1_without_err, l1) }
+
+// <l1> -> 'cpost_async1' <PC13>
+p3 -> si { CNT_cpost_async1' = CNT_cpost_async1 + 1  && l1' = l1 - 1 && PC13' = PC13 + 1 &&
+        havoc(CNT_cpost_async1, l1, PC13) }
+
+
+}
+
+
