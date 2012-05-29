@@ -1,8 +1,0 @@
-pointer u,v,w;
-while !(u == null) do
- w = u.next;
- u.next = v;
- v = u;
- u = w;
- w = null;
-od 
