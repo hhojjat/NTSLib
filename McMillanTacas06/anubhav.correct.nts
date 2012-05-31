@@ -12,28 +12,30 @@ nts anubhav;
  
 main{
 
-validity____retres_,validity__i_,validity__j_,validity__x_,validity__y_,__if_ndet_cond__,_ndet_arg_4,_ndet_arg_3,_ndet_arg_2,_ndet_arg_1,_ndet_arg_0,__retres,y,x,j,i : int ;
+__nts__naffected_ret_val_,validity____nts__naffected_ret_val__,validity____retres_,validity__i_,validity__j_,validity__x_,validity__y_,__ndet_cond__,__if_ndet_cond__,_ndet_arg_4,_ndet_arg_3,_ndet_arg_2,_ndet_arg_1,_ndet_arg_0,__retres,y,x,j,i : int ;
 
  out ret_val_, validity__ret_val__  : int;
 initial sinit ;
-final s19;
-error s1,s3,s9,s12,s15,s17,s18; sinit->s0 {  } 
+final s22;
+error s1,s3,s8,s10,s11,s14,s17,s18,s20,s21; sinit->s0 {  } 
  s0->s2 { x'=i and havoc(x) } 
  s2->s4 { y'=j and havoc(y) } 
  s4->s5 { havoc() } 
  s5->s6 { havoc() } 
  s6->s7 { x != 0 and havoc() } 
- s6->s8 { x = 0 and havoc() } 
- s7->s10 { x'=x-1 and havoc(x) } 
- s8->s11 { havoc() } 
- s10->s13 { y'=y-1 and havoc(y) } 
- s11->s14 { i = j and havoc() } 
- s11->s16 { i != j and __retres'=0 and havoc(__retres) } 
- s13->s5 { havoc() } 
- s14->s16 { y = 0 and __retres'=0 and havoc(__retres) } 
- s14->sinter0 { y != 0 and havoc(_ndet_arg_1,_ndet_arg_2) } 
- sinter0->s18 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,16,1,_ndet_arg_2,1) and havoc() } 
- s16->s19 { ret_val_'=__retres and havoc(ret_val_) }
+ s6->s9 { x = 0 and havoc() } 
+ s7->s12 { x'=x-1 and havoc(x) } 
+ s9->s13 { havoc() } 
+ s12->s15 { y'=y-1 and havoc(y) } 
+ s13->s16 { i = j and havoc() } 
+ s13->s19 { __retres'=0 and i != j and havoc(__retres) } 
+ s15->s5 { havoc() } 
+ s16->s19 { __retres'=0 and y = 0 and havoc(__retres) } 
+ s16->sinter0 { y != 0 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter0->s21 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,16,1,_ndet_arg_2,1) and havoc() } 
+ s16->sinter1 { y != 0 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter1->s21 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,16,1,_ndet_arg_2,1) and havoc() } 
+ s19->s22 { ret_val_'=__retres and havoc(ret_val_) }
 }
 __assert_fail{
 in a,b,c,d,e,f,g,h : int;
@@ -41,8 +43,6 @@ initial sinit ;
 error s0;
 sinit->s0 { true and havoc() }
 }
-
-
 
 NonDetInt{
 out ndet, validity_ndet_: int;
@@ -54,4 +54,63 @@ s0->s1{havoc()}
 
 }
 
+__VERIFIER_nondet_int{
+out ndet, validity_ndet_: int;
+initial sinit;
+final s1;
 
+sinit->s0{ havoc(ndet,  validity_ndet_)}
+s0->s1{havoc()}
+
+}
+
+__NdetValInRange {
+ out ndval, ndvalid : int;
+ in lowerb, lbval, upperb, upbval : int;
+ initial sinit;
+ final s1;
+
+ sinit->s1 { ndval' <= upperb and ndval' >= lowerb and ndvalid'=1 and havoc(ndval, ndvalid) }
+
+}
+
+strlen{
+ out len, valid_len : int;
+ in ptr_off, ptr_valid : int;
+
+ initial sinit;
+ final s1;
+ sinit->s0 {valid_len'=ptr_valid and havoc(valid_len,len)}
+ s0->s1 { havoc()}
+}
+
+memcpy{
+ in dest_off, dest_val, src_off, srv_val, sizein, size_val : int;
+ out ret_addr, valid_ret : int;
+ initial sinit;
+ final s1;
+
+ sinit -> s0 {ret_addr'=dest_off and valid_ret'=dest_val and havoc(ret_addr,valid_ret)}
+ s0->s1 {havoc()}
+}
+
+strstr{
+ in a,b,c,d : int;
+ out off, val : int;
+
+ initial  sinit;
+ final  sfinal;
+
+ sinit->sfinal {val' = b and havoc(off,val) }
+}
+
+printf{
+ in a,b,c,d : int;
+ out off, val : int;
+
+ initial  sinit;
+ final  sfinal;
+
+ sinit->sfinal { havoc(off,val) }
+
+}
