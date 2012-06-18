@@ -16,8 +16,8 @@ mid_4_base,mid_4_size,mid_3_base,mid_3_size,mid_2_base,mid_2_size,mid_1_base,mid
 
  out ret_val_, validity__ret_val__  : int;
 initial sinit ;
-final s51;
-error s1,s3,s5,s9,s10,s11,s13,s14,s15,s17,s18,s20,s22,s24,s26,s31,s33,s35,s37,s38,s40,s43,s45,s46,s47,s49; sinit->s0 { mid_4_size'=201*1 and mid_1_size'=101*1 and mid_2_size'=201*1 and mid_3_size'=101*1 } 
+final s52;
+error s1,s3,s5,s9,s10,s11,s13,s14,s15,s17,s18,s20,s22,s24,s26,s31,s33,s35,s37,s39,s41,s43,s46,s48,s49,s50; sinit->s0 { mid_4_size'=201*1 and mid_1_size'=101*1 and mid_2_size'=201*1 and mid_3_size'=101*1 } 
  s0->sinter0 { havoc() } 
  sinter0->s2 { (from',validity__from_')=NonDetInt() and havoc(from,validity__from_) } 
  s2->sinter1 { havoc() } 
@@ -51,22 +51,22 @@ error s1,s3,s5,s9,s10,s11,s13,s14,s15,s17,s18,s20,s22,s24,s26,s31,s33,s35,s37,s3
  s29->s33 { not (i < 101 and i >= 0) and havoc() } 
  s30->s34 { i < to and havoc() } 
  s30->s36 { i >= to and havoc() } 
- s32->s38 { not (j < 201 and j >= 0) and havoc() } 
- s32->s39 { j < 201 and j >= 0 and havoc() } 
- s34->s40 { not ((j < 201 and j >= 0) and (i < 101 and i >= 0)) and havoc() } 
- s34->s41 { (j < 201 and j >= 0) and (i < 101 and i >= 0) and havoc() } 
- s36->s38 { not (j < 201 and j >= 0) and havoc() } 
- s36->s39 { j < 201 and j >= 0 and havoc() } 
- s39->s42 { havoc() } 
- s41->s44 { i'=i+1 and havoc(i) } 
- s42->sinter7 { __if_ndet_cond__ = 0 and havoc(_ndet_arg_1,_ndet_arg_2,__if_ndet_cond__) } 
- sinter7->s46 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,34,1,_ndet_arg_2,1) and havoc() } 
- s42->sinter8 { __if_ndet_cond__ = 0 and havoc(_ndet_arg_1,_ndet_arg_2,__if_ndet_cond__) } 
- sinter8->s46 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,34,1,_ndet_arg_2,1) and havoc() } 
- s42->s48 { __retres'=0 and __if_ndet_cond__ != 0 and havoc(__if_ndet_cond__,__retres) } 
- s44->s50 { j'=j+1 and havoc(j) } 
- s48->s51 { ret_val_'=__retres and havoc(ret_val_) } 
- s50->s28 { havoc() }
+ s32->s38 { havoc() } 
+ s34->s39 { not ((j < 201 and j >= 0) and (i < 101 and i >= 0)) and havoc() } 
+ s34->s40 { (j < 201 and j >= 0) and (i < 101 and i >= 0) and havoc() } 
+ s36->s38 { havoc() } 
+ s38->s41 { not (j < 201 and j >= 0) and havoc() } 
+ s38->s42 { j < 201 and j >= 0 and havoc() } 
+ s40->s44 { i'=i+1 and havoc(i) } 
+ s42->s45 { havoc() } 
+ s44->s47 { j'=j+1 and havoc(j) } 
+ s45->sinter7 { __if_ndet_cond__ = 0 and havoc(_ndet_arg_1,_ndet_arg_2,__if_ndet_cond__) } 
+ sinter7->s49 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,34,1,_ndet_arg_2,1) and havoc() } 
+ s45->sinter8 { __if_ndet_cond__ = 0 and havoc(_ndet_arg_1,_ndet_arg_2,__if_ndet_cond__) } 
+ sinter8->s49 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,34,1,_ndet_arg_2,1) and havoc() } 
+ s45->s51 { __retres'=0 and __if_ndet_cond__ != 0 and havoc(__if_ndet_cond__,__retres) } 
+ s47->s28 { havoc() } 
+ s51->s52 { ret_val_'=__retres and havoc(ret_val_) }
 }
 __assert_fail{
 in a,b,c,d,e,f,g,h : int;

@@ -8,36 +8,35 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-nts copy1;
-validity__n_,n,validity__j_,j,validity__i_,i,y,x,validity__skip_,skip : int; 
+nts anubhav;
+ 
 main{
 
-mid_4_base,mid_4_size,mid_3_base,mid_3_size,mid_2_base,mid_2_size,mid_1_base,mid_1_size,__nts__naffected_ret_val_,validity____nts__naffected_ret_val__,validity____retres_,__ndet_cond__,__if_ndet_cond__,_ndet_arg_4,_ndet_arg_3,_ndet_arg_2,_ndet_arg_1,_ndet_arg_0,__retres : int ;
+__nts__naffected_ret_val_,validity____nts__naffected_ret_val__,validity____retres_,validity__i_,validity__j_,validity__x_,validity__y_,__ndet_cond__,__if_ndet_cond__,_ndet_arg_4,_ndet_arg_3,_ndet_arg_2,_ndet_arg_1,_ndet_arg_0,__retres,y,x,j,i : int ;
 
  out ret_val_, validity__ret_val__  : int;
 initial sinit ;
-final s20;
-error s1,s6,s8,s9,s12,s15,s16,s19,s21,s22; sinit->s0 { mid_4_size'=10*4 and mid_1_size'=10*4 and mid_2_size'=10*4 and mid_3_size'=10*4 } 
- s0->s2 { i'=0 and havoc(i) } 
- s2->s3 { havoc() } 
- s3->s4 { havoc() } 
- s4->s5 { i < n and havoc() } 
- s4->s7 { i >= n and havoc() } 
- s5->s9 { not ((i < 10 and i >= 0) and (i < 10 and i >= 0)) and havoc() } 
- s5->s10 { (i < 10 and i >= 0) and (i < 10 and i >= 0) and havoc() } 
- s7->s11 { havoc() } 
- s10->s13 { i'=i+1 and havoc(i) } 
- s11->s14 { j >= 0 and havoc() } 
- s11->s17 { __retres'=0 and j < 0 and havoc(__retres) } 
- s13->s3 { havoc() } 
- s14->s17 { __retres'=0 and j >= n and havoc(__retres) } 
- s14->s18 { j < n and havoc() } 
- s17->s20 { ret_val_'=__retres and havoc(ret_val_) } 
- s18->s17 { __retres'=0 and i <=  n and havoc(__retres) } 
- s18->sinter0 { i > n and havoc(_ndet_arg_1,_ndet_arg_2) } 
- sinter0->s22 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,18,1,_ndet_arg_2,1) and havoc() } 
- s18->sinter1 { i > n and havoc(_ndet_arg_1,_ndet_arg_2) } 
- sinter1->s22 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,18,1,_ndet_arg_2,1) and havoc() }
+final s23;
+error s1,s3,s8,s10,s11,s14,s18,s19,s21,s22; sinit->s0 {  } 
+ s0->s2 { x'=i and havoc(x) } 
+ s2->s4 { y'=j and havoc(y) } 
+ s4->s5 { havoc() } 
+ s5->s6 { havoc() } 
+ s6->s7 { x != 0 and havoc() } 
+ s6->s9 { x = 0 and havoc() } 
+ s7->s12 { x'=x-1 and havoc(x) } 
+ s9->s13 { havoc() } 
+ s12->s15 { y'=y-1 and havoc(y) } 
+ s13->s16 { havoc() } 
+ s15->s5 { havoc() } 
+ s16->s17 { i = j and havoc() } 
+ s16->s20 { __retres'=0 and i != j and havoc(__retres) } 
+ s17->s20 { __retres'=0 and y = 0 and havoc(__retres) } 
+ s17->sinter0 { y != 0 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter0->s22 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,16,1,_ndet_arg_2,1) and havoc() } 
+ s17->sinter1 { y != 0 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter1->s22 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,16,1,_ndet_arg_2,1) and havoc() } 
+ s20->s23 { ret_val_'=__retres and havoc(ret_val_) }
 }
 __assert_fail{
 in a,b,c,d,e,f,g,h : int;
