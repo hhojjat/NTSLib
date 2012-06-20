@@ -1,0 +1,142 @@
+/*
+Licensed under the MIT License.
+Copyright (C) 2012 EPFL (Switzerland) , Verimag (France).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+nts string_concat1;
+ 
+main{
+
+mid_6_base,mid_6_size,mid_5_base,mid_5_size,mid_4_base,mid_4_size,mid_3_base,mid_3_size,mid_2_base,mid_2_size,mid_1_base,mid_1_size,__nts__naffected_ret_val_,validity____nts__naffected_ret_val__,validity____retres_,validity__i_,validity__j_,validity__x_,validity__y_,validity__z_,__ndet_cond__,__if_ndet_cond__,_ndet_arg_4,_ndet_arg_3,_ndet_arg_2,_ndet_arg_1,_ndet_arg_0,__retres,j,i : int ;
+
+ out ret_val_, validity__ret_val__  : int;
+initial sinit ;
+final s42;
+error s1,s6,s8,s9,s12,s15,s16,s17,s22,s24,s25,s28,s31,s33,s34,s35,s38,s39,s40; sinit->s0 { mid_4_size'=101*1 and mid_5_size'=101*1 and mid_1_size'=101*1 and mid_6_size'=201*1 and mid_2_size'=101*1 and mid_3_size'=201*1 } 
+ s0->s2 { i'=0 and havoc(i) } 
+ s2->s3 { havoc() } 
+ s3->s4 { havoc() } 
+ s4->s5 { __if_ndet_cond__ = 0 and i < 101 and i >= 0 and havoc(__if_ndet_cond__) } 
+ s4->s6 { not (i < 101 and i >= 0) and havoc() } 
+ s4->s7 { __if_ndet_cond__ != 0 and i < 101 and i >= 0 and havoc(__if_ndet_cond__) } 
+ s4->s8 { not (i < 101 and i >= 0) and havoc() } 
+ s5->s9 { not ((i < 201 and i >= 0) and (i < 101 and i >= 0)) and havoc() } 
+ s5->s10 { (i < 201 and i >= 0) and (i < 101 and i >= 0) and havoc() } 
+ s7->s11 { havoc() } 
+ s10->s13 { i'=i+1 and havoc(i) } 
+ s11->s14 { havoc() } 
+ s13->s3 { havoc() } 
+ s14->sinter0 { i >= 100 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter0->s16 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,19,1,_ndet_arg_2,1) and havoc() } 
+ s14->sinter1 { i >= 100 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter1->s16 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,19,1,_ndet_arg_2,1) and havoc() } 
+ s14->s18 { j'=0 and i < 100 and havoc(j) } 
+ s18->s19 { havoc() } 
+ s19->s20 { havoc() } 
+ s20->s21 { __if_ndet_cond__ = 0 and j < 101 and j >= 0 and havoc(__if_ndet_cond__) } 
+ s20->s22 { not (j < 101 and j >= 0) and havoc() } 
+ s20->s23 { __if_ndet_cond__ != 0 and j < 101 and j >= 0 and havoc(__if_ndet_cond__) } 
+ s20->s24 { not (j < 101 and j >= 0) and havoc() } 
+ s21->s25 { not ((i < 201 and i >= 0) and (j < 101 and j >= 0)) and havoc() } 
+ s21->s26 { (i < 201 and i >= 0) and (j < 101 and j >= 0) and havoc() } 
+ s23->s27 { havoc() } 
+ s26->s29 { i'=i+1 and havoc(i) } 
+ s27->s30 { havoc() } 
+ s29->s32 { j'=j+1 and havoc(j) } 
+ s30->sinter2 { j >= 100 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter2->s34 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,33,1,_ndet_arg_2,1) and havoc() } 
+ s30->sinter3 { j >= 100 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter3->s34 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,33,1,_ndet_arg_2,1) and havoc() } 
+ s30->s35 { not (j < 201 and j >= 0) and j < 100 and havoc() } 
+ s30->s36 { j < 201 and j >= 0 and j < 100 and havoc() } 
+ s32->s19 { havoc() } 
+ s36->s37 { havoc() } 
+ s37->sinter4 { i >= 200 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter4->s39 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,38,1,_ndet_arg_2,1) and havoc() } 
+ s37->sinter5 { i >= 200 and havoc(_ndet_arg_1,_ndet_arg_2) } 
+ sinter5->s39 { __assert_fail(_ndet_arg_0,1,_ndet_arg_1,1,38,1,_ndet_arg_2,1) and havoc() } 
+ s37->s41 { __retres'=0 and i < 200 and havoc(__retres) } 
+ s41->s42 { ret_val_'=__retres and havoc(ret_val_) }
+}
+__assert_fail{
+in a,b,c,d,e,f,g,h : int;
+initial sinit ;
+error s0;
+sinit->s0 { true and havoc() }
+}
+
+NonDetInt{
+out ndet, validity_ndet_: int;
+initial sinit;
+final s1;
+
+sinit->s0{ havoc(ndet,  validity_ndet_)}
+s0->s1{havoc()}
+
+}
+
+__VERIFIER_nondet_int{
+out ndet, validity_ndet_: int;
+initial sinit;
+final s1;
+
+sinit->s0{ havoc(ndet,  validity_ndet_)}
+s0->s1{havoc()}
+
+}
+
+__NdetValInRange {
+ out ndval, ndvalid : int;
+ in lowerb, lbval, upperb, upbval : int;
+ initial sinit;
+ final s1;
+
+ sinit->s1 { ndval' <= upperb and ndval' >= lowerb and ndvalid'=1 and havoc(ndval, ndvalid) }
+
+}
+
+strlen{
+ out len, valid_len : int;
+ in ptr_off, ptr_valid : int;
+
+ initial sinit;
+ final s1;
+ sinit->s0 {valid_len'=ptr_valid and havoc(valid_len,len)}
+ s0->s1 { havoc()}
+}
+
+memcpy{
+ in dest_off, dest_val, src_off, srv_val, sizein, size_val : int;
+ out ret_addr, valid_ret : int;
+ initial sinit;
+ final s1;
+
+ sinit -> s0 {ret_addr'=dest_off and valid_ret'=dest_val and havoc(ret_addr,valid_ret)}
+ s0->s1 {havoc()}
+}
+
+strstr{
+ in a,b,c,d : int;
+ out off, val : int;
+
+ initial  sinit;
+ final  sfinal;
+
+ sinit->sfinal {val' = b and havoc(off,val) }
+}
+
+printf{
+ in a,b,c,d : int;
+ out off, val : int;
+
+ initial  sinit;
+ final  sfinal;
+
+ sinit->sfinal { havoc(off,val) }
+
+}
