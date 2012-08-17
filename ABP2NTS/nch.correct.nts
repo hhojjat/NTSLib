@@ -1,0 +1,673 @@
+/*
+Licensed under the MIT License.
+Copyright (C) 2012 EPFL (Switzerland) , Verimag (France), IMDEA Software (Spain).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+nts pgm;
+
+// Global Decls
+main_without_err, PC2, cmain: int;
+CNT_cpost_conn_handle_write, CNT_cpost_conn_handle_read, CNT_cpost_conn_dispatcher: int;
+MI_b0_state_eq_WRITE__0, MI_b1_ev_eq_TO_SEND__0: int;
+MF_b0_state_eq_WRITE__0, MF_b1_ev_eq_TO_SEND__0: int;
+
+MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1: int;
+MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1: int;
+
+main {
+b0_state_eq_WRITE, b1_ev_eq_TO_SEND, res: int;
+nxt_b0_state_eq_WRITE, nxt_b1_ev_eq_TO_SEND: int;
+initial si;
+final sf;
+error se;
+
+si -> s0 { b0_state_eq_WRITE' >= 0 && b0_state_eq_WRITE' <= 1 && b1_ev_eq_TO_SEND' >= 0 && b1_ev_eq_TO_SEND' <= 1 &&  main_without_err' = 0 && PC2' = 0 && cmain' = 0 && CNT_cpost_conn_handle_write' = 0 && CNT_cpost_conn_handle_read' = 0 && CNT_cpost_conn_dispatcher' = 0 && havoc(b0_state_eq_WRITE, b1_ev_eq_TO_SEND, main_without_err, PC2, cmain, CNT_cpost_conn_handle_write, CNT_cpost_conn_handle_read, CNT_cpost_conn_dispatcher)}
+s0 -> s1 { main_without_err' = main_without_err + 1 &&
+       MI_b0_state_eq_WRITE__1' = b0_state_eq_WRITE && MF_b0_state_eq_WRITE__1' = nxt_b0_state_eq_WRITE' &&
+	 nxt_b0_state_eq_WRITE' >= 0 && nxt_b0_state_eq_WRITE' <= 1 && MI_b1_ev_eq_TO_SEND__1' = b1_ev_eq_TO_SEND && MF_b1_ev_eq_TO_SEND__1' = nxt_b1_ev_eq_TO_SEND' &&
+	 nxt_b1_ev_eq_TO_SEND' >= 0 && nxt_b1_ev_eq_TO_SEND' <= 1 && 
+       havoc (main_without_err, MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1, MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1, nxt_b0_state_eq_WRITE, nxt_b1_ev_eq_TO_SEND) }
+s1 -> s2_1 { res' = traverse_main_without_err_1() && havoc(res) }
+s2_1 -> eventloop { res = 1 && res' = 0 && b0_state_eq_WRITE' = nxt_b0_state_eq_WRITE && b1_ev_eq_TO_SEND' = nxt_b1_ev_eq_TO_SEND &&  havoc(res, b0_state_eq_WRITE, b1_ev_eq_TO_SEND) }
+
+eventloop -> sf { CNT_cpost_conn_handle_write = 0 && CNT_cpost_conn_handle_read = 0 && CNT_cpost_conn_dispatcher = 0 && havoc() }
+eventloop -> s3 { CNT_cpost_conn_handle_write >= 1 && CNT_cpost_conn_handle_write' = CNT_cpost_conn_handle_write - 1 && havoc(CNT_cpost_conn_handle_write) }
+
+s3 -> s4 { 
+           MI_b0_state_eq_WRITE__1' = b0_state_eq_WRITE && MF_b0_state_eq_WRITE__1' = nxt_b0_state_eq_WRITE' &&
+	 nxt_b0_state_eq_WRITE' >= 0 && nxt_b0_state_eq_WRITE' <= 1 && MI_b1_ev_eq_TO_SEND__1' = b1_ev_eq_TO_SEND && MF_b1_ev_eq_TO_SEND__1' = nxt_b1_ev_eq_TO_SEND' &&
+	 nxt_b1_ev_eq_TO_SEND' >= 0 && nxt_b1_ev_eq_TO_SEND' <= 1 && 
+           havoc( MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1, MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1, nxt_b0_state_eq_WRITE, nxt_b1_ev_eq_TO_SEND) }
+
+s4 -> se_4 { res' = traverse_cpost_conn_handle_write_with_err_1() && havoc(res) }
+se_4 -> se { res = 1 && res' = 0 && b0_state_eq_WRITE' = nxt_b0_state_eq_WRITE && b1_ev_eq_TO_SEND' = nxt_b1_ev_eq_TO_SEND &&  havoc(res, b0_state_eq_WRITE, b1_ev_eq_TO_SEND) }
+
+s3 -> s5 { 
+           MI_b0_state_eq_WRITE__1' = b0_state_eq_WRITE && MF_b0_state_eq_WRITE__1' = nxt_b0_state_eq_WRITE' &&
+	 nxt_b0_state_eq_WRITE' >= 0 && nxt_b0_state_eq_WRITE' <= 1 && MI_b1_ev_eq_TO_SEND__1' = b1_ev_eq_TO_SEND && MF_b1_ev_eq_TO_SEND__1' = nxt_b1_ev_eq_TO_SEND' &&
+	 nxt_b1_ev_eq_TO_SEND' >= 0 && nxt_b1_ev_eq_TO_SEND' <= 1 && 
+           havoc( MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1, MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1, nxt_b0_state_eq_WRITE, nxt_b1_ev_eq_TO_SEND) }
+
+s5 -> s2_5 { res' = traverse_cpost_conn_handle_write_without_err_1() && havoc(res) }
+s2_5 -> eventloop { b0_state_eq_WRITE' = nxt_b0_state_eq_WRITE && b1_ev_eq_TO_SEND' = nxt_b1_ev_eq_TO_SEND &&  havoc(b0_state_eq_WRITE, b1_ev_eq_TO_SEND) }
+
+eventloop -> s6 { CNT_cpost_conn_handle_read >= 1 && CNT_cpost_conn_handle_read' = CNT_cpost_conn_handle_read - 1 && havoc(CNT_cpost_conn_handle_read) }
+
+s6 -> s8 { 
+           MI_b0_state_eq_WRITE__1' = b0_state_eq_WRITE && MF_b0_state_eq_WRITE__1' = nxt_b0_state_eq_WRITE' &&
+	 nxt_b0_state_eq_WRITE' >= 0 && nxt_b0_state_eq_WRITE' <= 1 && MI_b1_ev_eq_TO_SEND__1' = b1_ev_eq_TO_SEND && MF_b1_ev_eq_TO_SEND__1' = nxt_b1_ev_eq_TO_SEND' &&
+	 nxt_b1_ev_eq_TO_SEND' >= 0 && nxt_b1_ev_eq_TO_SEND' <= 1 && 
+           havoc( MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1, MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1, nxt_b0_state_eq_WRITE, nxt_b1_ev_eq_TO_SEND) }
+
+s8 -> s2_8 { res' = traverse_cpost_conn_handle_read_without_err_1() && havoc(res) }
+s2_8 -> eventloop { b0_state_eq_WRITE' = nxt_b0_state_eq_WRITE && b1_ev_eq_TO_SEND' = nxt_b1_ev_eq_TO_SEND &&  havoc(b0_state_eq_WRITE, b1_ev_eq_TO_SEND) }
+
+eventloop -> s9 { CNT_cpost_conn_dispatcher >= 1 && CNT_cpost_conn_dispatcher' = CNT_cpost_conn_dispatcher - 1 && havoc(CNT_cpost_conn_dispatcher) }
+
+s9 -> s11 { 
+           MI_b0_state_eq_WRITE__1' = b0_state_eq_WRITE && MF_b0_state_eq_WRITE__1' = nxt_b0_state_eq_WRITE' &&
+	 nxt_b0_state_eq_WRITE' >= 0 && nxt_b0_state_eq_WRITE' <= 1 && MI_b1_ev_eq_TO_SEND__1' = b1_ev_eq_TO_SEND && MF_b1_ev_eq_TO_SEND__1' = nxt_b1_ev_eq_TO_SEND' &&
+	 nxt_b1_ev_eq_TO_SEND' >= 0 && nxt_b1_ev_eq_TO_SEND' <= 1 && 
+           havoc( MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1, MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1, nxt_b0_state_eq_WRITE, nxt_b1_ev_eq_TO_SEND) }
+
+s11 -> s2_11 { res' = traverse_cpost_conn_dispatcher_without_err_1() && havoc(res) }
+s2_11 -> eventloop { b0_state_eq_WRITE' = nxt_b0_state_eq_WRITE && b1_ev_eq_TO_SEND' = nxt_b1_ev_eq_TO_SEND &&  havoc(b0_state_eq_WRITE, b1_ev_eq_TO_SEND) }
+
+}
+
+//----------------------------------
+// Grammar of main_without_err
+// <PC2> -> 'e'
+// <PC44> -> 'assert (T)' <PC45>
+// <PC45> -> 'e'
+// <cmain> -> 'cpost_conn_dispatcher' <PC44>
+// <main_without_err> -> <cmain> <PC2>
+//----------------------------------
+traverse_main_without_err_0 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { PC2 >= 1 && havoc() }
+si -> p3 { cmain >= 1 && havoc() }
+si -> p4 { main_without_err >= 1 && havoc() }
+
+
+// <PC2> -> 'e'
+p0 -> sf { PC2' = PC2 - 1 && done' = 1 &&
+       	MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+       	havoc(PC2, done) }
+
+// <PC44> -> 'assert (T)' <PC45>
+p1 -> p2 { 1 = 1 &&  
+        havoc() }
+
+// <PC45> -> 'e'
+p2 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+       	havoc(done) }
+
+// <cmain> -> 'cpost_conn_dispatcher' <PC44>
+p3 -> p1 { CNT_cpost_conn_dispatcher' = CNT_cpost_conn_dispatcher + 1  && cmain' = cmain - 1 && 
+        havoc(CNT_cpost_conn_dispatcher, cmain) }
+
+// <main_without_err> -> <cmain> <PC2> 
+p4 -> p4_0 {0 >= 1 &&
+        MF_b0_state_eq_WRITE__0' = MF_b0_state_eq_WRITE__0 && MF_b0_state_eq_WRITE__0' = MI_b0_state_eq_WRITE__0' &&
+	 MI_b0_state_eq_WRITE__0' >= 0 && MI_b0_state_eq_WRITE__0' <= 1 && MF_b1_ev_eq_TO_SEND__0' = MF_b1_ev_eq_TO_SEND__0 && MF_b1_ev_eq_TO_SEND__0' = MI_b1_ev_eq_TO_SEND__0' &&
+	 MI_b1_ev_eq_TO_SEND__0' >= 0 && MI_b1_ev_eq_TO_SEND__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && PC2' = PC2 + 1 &&
+        havoc(MF_b0_state_eq_WRITE__0, MF_b1_ev_eq_TO_SEND__0, MF_b0_state_eq_WRITE__0, MF_b1_ev_eq_TO_SEND__0, MI_b0_state_eq_WRITE__0, MI_b1_ev_eq_TO_SEND__0,  main_without_err, PC2) }
+
+p4_0 -> si4_0 { res' = 1 && havoc(res) }
+
+si4_0 -> p3 { res = 1 && res' = 0 && cmain' = cmain + 1 && 
+        havoc(res, cmain) }
+
+p4 -> p4_1 {0 >= 1 &&
+        MI_b0_state_eq_WRITE__0' = MI_b0_state_eq_WRITE__0 && MI_b0_state_eq_WRITE__0' = MF_b0_state_eq_WRITE__0' &&
+	 MF_b0_state_eq_WRITE__0' >= 0 && MF_b0_state_eq_WRITE__0' <= 1 && MI_b1_ev_eq_TO_SEND__0' = MI_b1_ev_eq_TO_SEND__0 && MI_b1_ev_eq_TO_SEND__0' = MF_b1_ev_eq_TO_SEND__0' &&
+	 MF_b1_ev_eq_TO_SEND__0' >= 0 && MF_b1_ev_eq_TO_SEND__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && cmain' = cmain + 1 &&
+        havoc(MI_b0_state_eq_WRITE__0, MI_b1_ev_eq_TO_SEND__0, MI_b0_state_eq_WRITE__0, MI_b1_ev_eq_TO_SEND__0, MF_b0_state_eq_WRITE__0, MF_b1_ev_eq_TO_SEND__0,  main_without_err, cmain) }
+
+p4_1 -> si4_1 { res' = 1 &&  havoc(res) }
+
+si4_1 -> p0 { res = 1 && res' = 0 && PC2' = PC2 + 1 &&
+        havoc(res, PC2) }
+
+
+}
+
+//----------------------------------
+// Grammar of main_without_err
+// <PC2> -> 'e'
+// <PC44> -> 'assert (T)' <PC45>
+// <PC45> -> 'e'
+// <cmain> -> 'cpost_conn_dispatcher' <PC44>
+// <main_without_err> -> <cmain> <PC2>
+//----------------------------------
+traverse_main_without_err_1 {
+res: int;
+out done: int;
+initial si;
+final sf;
+
+si -> p0 { PC2 >= 1 && havoc() }
+si -> p3 { cmain >= 1 && havoc() }
+si -> p4 { main_without_err >= 1 && havoc() }
+
+
+// <PC2> -> 'e'
+p0 -> sf { PC2' = PC2 - 1 && done' = 1 &&
+       	MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+       	havoc(PC2, done) }
+
+// <PC44> -> 'assert (T)' <PC45>
+p1 -> p2 { 1 = 1 &&  
+        havoc() }
+
+// <PC45> -> 'e'
+p2 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+       	havoc(done) }
+
+// <cmain> -> 'cpost_conn_dispatcher' <PC44>
+p3 -> p1 { CNT_cpost_conn_dispatcher' = CNT_cpost_conn_dispatcher + 1  && cmain' = cmain - 1 && 
+        havoc(CNT_cpost_conn_dispatcher, cmain) }
+
+// <main_without_err> -> <cmain> <PC2> 
+p4 -> p4_0 {1 >= 1 &&
+        MF_b0_state_eq_WRITE__0' = MF_b0_state_eq_WRITE__1 && MF_b0_state_eq_WRITE__1' = MI_b0_state_eq_WRITE__0' &&
+	 MI_b0_state_eq_WRITE__0' >= 0 && MI_b0_state_eq_WRITE__0' <= 1 && MF_b1_ev_eq_TO_SEND__0' = MF_b1_ev_eq_TO_SEND__1 && MF_b1_ev_eq_TO_SEND__1' = MI_b1_ev_eq_TO_SEND__0' &&
+	 MI_b1_ev_eq_TO_SEND__0' >= 0 && MI_b1_ev_eq_TO_SEND__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && PC2' = PC2 + 1 &&
+        havoc(MF_b0_state_eq_WRITE__0, MF_b1_ev_eq_TO_SEND__0, MF_b0_state_eq_WRITE__1, MF_b1_ev_eq_TO_SEND__1, MI_b0_state_eq_WRITE__0, MI_b1_ev_eq_TO_SEND__0,  main_without_err, PC2) }
+
+p4_0 -> si4_0 { res' = traverse_main_without_err_0() && havoc(res) }
+
+si4_0 -> p3 { res = 1 && res' = 0 && cmain' = cmain + 1 && 
+        havoc(res, cmain) }
+
+p4 -> p4_1 {1 >= 1 &&
+        MI_b0_state_eq_WRITE__0' = MI_b0_state_eq_WRITE__1 && MI_b0_state_eq_WRITE__1' = MF_b0_state_eq_WRITE__0' &&
+	 MF_b0_state_eq_WRITE__0' >= 0 && MF_b0_state_eq_WRITE__0' <= 1 && MI_b1_ev_eq_TO_SEND__0' = MI_b1_ev_eq_TO_SEND__1 && MI_b1_ev_eq_TO_SEND__1' = MF_b1_ev_eq_TO_SEND__0' &&
+	 MF_b1_ev_eq_TO_SEND__0' >= 0 && MF_b1_ev_eq_TO_SEND__0' <= 1 && 
+        main_without_err' = main_without_err - 1 && cmain' = cmain + 1 &&
+        havoc(MI_b0_state_eq_WRITE__0, MI_b1_ev_eq_TO_SEND__0, MI_b0_state_eq_WRITE__1, MI_b1_ev_eq_TO_SEND__1, MF_b0_state_eq_WRITE__0, MF_b1_ev_eq_TO_SEND__0,  main_without_err, cmain) }
+
+p4_1 -> si4_1 { res' = traverse_main_without_err_0() &&  havoc(res) }
+
+si4_1 -> p0 { res = 1 && res' = 0 && PC2' = PC2 + 1 &&
+        havoc(res, PC2) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_handle_write_with_err
+// <END_l1_cpost_conn_handle_write_prime_END> -> 'e'
+// <INIT_PC17_prime_END> -> 'assert(!b1_ev_eq_TO_SEND)' <INIT_PC18_prime_END>
+// <INIT_PC18_prime_END> -> 'assert (F)'
+// <INIT_PC18_prime_END> -> 'assert (F)' <END_l1_cpost_conn_handle_write_prime_END>
+// <cpost_conn_handle_write_with_err> -> 'assert(b0_state_eq_WRITE)' <INIT_PC17_prime_END>
+//----------------------------------
+traverse_cpost_conn_handle_write_with_err_0 {
+res: int;
+out done: int;
+initial p3;
+final sf;
+
+
+
+// <END_l1_cpost_conn_handle_write_prime_END> -> 'e'
+p0 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+       	havoc(done) }
+
+// <INIT_PC17_prime_END> -> 'assert(!b1_ev_eq_TO_SEND)' <INIT_PC18_prime_END>
+p1 -> p2 { MI_b1_ev_eq_TO_SEND__0 = 0 &&  
+        havoc() }
+
+// <INIT_PC18_prime_END> -> 'assert (F)'
+p2 -> sf { 1 = 1 &&  done' = 1 && MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+        havoc(done) }
+
+// <INIT_PC18_prime_END> -> 'assert (F)' <END_l1_cpost_conn_handle_write_prime_END>
+p2 -> p0 { 1 = 1 &&  
+        havoc() }
+
+// <cpost_conn_handle_write_with_err> -> 'assert(b0_state_eq_WRITE)' <INIT_PC17_prime_END>
+p3 -> p1 { MI_b0_state_eq_WRITE__0 = 1 &&  
+        havoc() }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_handle_write_with_err
+// <END_l1_cpost_conn_handle_write_prime_END> -> 'e'
+// <INIT_PC17_prime_END> -> 'assert(!b1_ev_eq_TO_SEND)' <INIT_PC18_prime_END>
+// <INIT_PC18_prime_END> -> 'assert (F)'
+// <INIT_PC18_prime_END> -> 'assert (F)' <END_l1_cpost_conn_handle_write_prime_END>
+// <cpost_conn_handle_write_with_err> -> 'assert(b0_state_eq_WRITE)' <INIT_PC17_prime_END>
+//----------------------------------
+traverse_cpost_conn_handle_write_with_err_1 {
+res: int;
+out done: int;
+initial p3;
+final sf;
+
+
+
+// <END_l1_cpost_conn_handle_write_prime_END> -> 'e'
+p0 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+       	havoc(done) }
+
+// <INIT_PC17_prime_END> -> 'assert(!b1_ev_eq_TO_SEND)' <INIT_PC18_prime_END>
+p1 -> p2 { MI_b1_ev_eq_TO_SEND__1 = 0 &&  
+        havoc() }
+
+// <INIT_PC18_prime_END> -> 'assert (F)'
+p2 -> sf { 1 = 1 &&  done' = 1 && MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+        havoc(done) }
+
+// <INIT_PC18_prime_END> -> 'assert (F)' <END_l1_cpost_conn_handle_write_prime_END>
+p2 -> p0 { 1 = 1 &&  
+        havoc() }
+
+// <cpost_conn_handle_write_with_err> -> 'assert(b0_state_eq_WRITE)' <INIT_PC17_prime_END>
+p3 -> p1 { MI_b0_state_eq_WRITE__1 = 1 &&  
+        havoc() }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_handle_write_without_err
+// <PC17> -> 'assert(b1_ev_eq_TO_SEND)' <l1_cpost_conn_handle_write>
+// <PC20> -> 'b1_ev_eq_TO_SEND := F' <PC21>
+// <PC21> -> 'b0_state_eq_WRITE := F' <l2_cpost_conn_handle_write>
+// <cpost_conn_handle_write_without_err> -> 'assert(!b0_state_eq_WRITE)' <l2_cpost_conn_handle_write>
+// <cpost_conn_handle_write_without_err> -> 'assert(b0_state_eq_WRITE)' <PC17>
+// <l1_cpost_conn_handle_write> -> 'cpost_conn_handle_read' <PC20>
+// <l2_cpost_conn_handle_write> -> 'e'
+//----------------------------------
+traverse_cpost_conn_handle_write_without_err_0 {
+res: int;
+out done: int;
+initial p3;
+final sf;
+
+
+
+// <PC17> -> 'assert(b1_ev_eq_TO_SEND)' <l1_cpost_conn_handle_write>
+p0 -> p4 { MI_b1_ev_eq_TO_SEND__0 = 1 &&  
+        havoc() }
+
+// <PC20> -> 'b1_ev_eq_TO_SEND := F' <PC21>
+p1 -> p2 { MI_b1_ev_eq_TO_SEND__0' = 0 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__0) }
+
+// <PC21> -> 'b0_state_eq_WRITE := F' <l2_cpost_conn_handle_write>
+p2 -> p5 { MI_b0_state_eq_WRITE__0' = 0 &&  
+        havoc(MI_b0_state_eq_WRITE__0) }
+
+// <cpost_conn_handle_write_without_err> -> 'assert(!b0_state_eq_WRITE)' <l2_cpost_conn_handle_write>
+p3 -> p5 { MI_b0_state_eq_WRITE__0 = 0 &&  
+        havoc() }
+
+// <cpost_conn_handle_write_without_err> -> 'assert(b0_state_eq_WRITE)' <PC17>
+p3 -> p0 { MI_b0_state_eq_WRITE__0 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_handle_write> -> 'cpost_conn_handle_read' <PC20>
+p4 -> p1 { CNT_cpost_conn_handle_read' = CNT_cpost_conn_handle_read + 1  &&  
+        havoc(CNT_cpost_conn_handle_read) }
+
+// <l2_cpost_conn_handle_write> -> 'e'
+p5 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+       	havoc(done) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_handle_write_without_err
+// <PC17> -> 'assert(b1_ev_eq_TO_SEND)' <l1_cpost_conn_handle_write>
+// <PC20> -> 'b1_ev_eq_TO_SEND := F' <PC21>
+// <PC21> -> 'b0_state_eq_WRITE := F' <l2_cpost_conn_handle_write>
+// <cpost_conn_handle_write_without_err> -> 'assert(!b0_state_eq_WRITE)' <l2_cpost_conn_handle_write>
+// <cpost_conn_handle_write_without_err> -> 'assert(b0_state_eq_WRITE)' <PC17>
+// <l1_cpost_conn_handle_write> -> 'cpost_conn_handle_read' <PC20>
+// <l2_cpost_conn_handle_write> -> 'e'
+//----------------------------------
+traverse_cpost_conn_handle_write_without_err_1 {
+res: int;
+out done: int;
+initial p3;
+final sf;
+
+
+
+// <PC17> -> 'assert(b1_ev_eq_TO_SEND)' <l1_cpost_conn_handle_write>
+p0 -> p4 { MI_b1_ev_eq_TO_SEND__1 = 1 &&  
+        havoc() }
+
+// <PC20> -> 'b1_ev_eq_TO_SEND := F' <PC21>
+p1 -> p2 { MI_b1_ev_eq_TO_SEND__1' = 0 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__1) }
+
+// <PC21> -> 'b0_state_eq_WRITE := F' <l2_cpost_conn_handle_write>
+p2 -> p5 { MI_b0_state_eq_WRITE__1' = 0 &&  
+        havoc(MI_b0_state_eq_WRITE__1) }
+
+// <cpost_conn_handle_write_without_err> -> 'assert(!b0_state_eq_WRITE)' <l2_cpost_conn_handle_write>
+p3 -> p5 { MI_b0_state_eq_WRITE__1 = 0 &&  
+        havoc() }
+
+// <cpost_conn_handle_write_without_err> -> 'assert(b0_state_eq_WRITE)' <PC17>
+p3 -> p0 { MI_b0_state_eq_WRITE__1 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_handle_write> -> 'cpost_conn_handle_read' <PC20>
+p4 -> p1 { CNT_cpost_conn_handle_read' = CNT_cpost_conn_handle_read + 1  &&  
+        havoc(CNT_cpost_conn_handle_read) }
+
+// <l2_cpost_conn_handle_write> -> 'e'
+p5 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+       	havoc(done) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_handle_read_without_err
+// <PC25> -> 'cpost_conn_handle_write' <PC26>
+// <PC26> -> 'b1_ev_eq_TO_SEND := T' <PC27>
+// <PC27> -> 'b0_state_eq_WRITE := T' <l1_cpost_conn_handle_read>
+// <cpost_conn_handle_read_without_err> -> 'assert(!b0_state_eq_WRITE)' <PC25>
+// <cpost_conn_handle_read_without_err> -> 'assert(b0_state_eq_WRITE)' <l1_cpost_conn_handle_read>
+// <l1_cpost_conn_handle_read> -> 'e'
+//----------------------------------
+traverse_cpost_conn_handle_read_without_err_0 {
+res: int;
+out done: int;
+initial p3;
+final sf;
+
+
+
+// <PC25> -> 'cpost_conn_handle_write' <PC26>
+p0 -> p1 { CNT_cpost_conn_handle_write' = CNT_cpost_conn_handle_write + 1  &&  
+        havoc(CNT_cpost_conn_handle_write) }
+
+// <PC26> -> 'b1_ev_eq_TO_SEND := T' <PC27>
+p1 -> p2 { MI_b1_ev_eq_TO_SEND__0' = 1 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__0) }
+
+// <PC27> -> 'b0_state_eq_WRITE := T' <l1_cpost_conn_handle_read>
+p2 -> p4 { MI_b0_state_eq_WRITE__0' = 1 &&  
+        havoc(MI_b0_state_eq_WRITE__0) }
+
+// <cpost_conn_handle_read_without_err> -> 'assert(!b0_state_eq_WRITE)' <PC25>
+p3 -> p0 { MI_b0_state_eq_WRITE__0 = 0 &&  
+        havoc() }
+
+// <cpost_conn_handle_read_without_err> -> 'assert(b0_state_eq_WRITE)' <l1_cpost_conn_handle_read>
+p3 -> p4 { MI_b0_state_eq_WRITE__0 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_handle_read> -> 'e'
+p4 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+       	havoc(done) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_handle_read_without_err
+// <PC25> -> 'cpost_conn_handle_write' <PC26>
+// <PC26> -> 'b1_ev_eq_TO_SEND := T' <PC27>
+// <PC27> -> 'b0_state_eq_WRITE := T' <l1_cpost_conn_handle_read>
+// <cpost_conn_handle_read_without_err> -> 'assert(!b0_state_eq_WRITE)' <PC25>
+// <cpost_conn_handle_read_without_err> -> 'assert(b0_state_eq_WRITE)' <l1_cpost_conn_handle_read>
+// <l1_cpost_conn_handle_read> -> 'e'
+//----------------------------------
+traverse_cpost_conn_handle_read_without_err_1 {
+res: int;
+out done: int;
+initial p3;
+final sf;
+
+
+
+// <PC25> -> 'cpost_conn_handle_write' <PC26>
+p0 -> p1 { CNT_cpost_conn_handle_write' = CNT_cpost_conn_handle_write + 1  &&  
+        havoc(CNT_cpost_conn_handle_write) }
+
+// <PC26> -> 'b1_ev_eq_TO_SEND := T' <PC27>
+p1 -> p2 { MI_b1_ev_eq_TO_SEND__1' = 1 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__1) }
+
+// <PC27> -> 'b0_state_eq_WRITE := T' <l1_cpost_conn_handle_read>
+p2 -> p4 { MI_b0_state_eq_WRITE__1' = 1 &&  
+        havoc(MI_b0_state_eq_WRITE__1) }
+
+// <cpost_conn_handle_read_without_err> -> 'assert(!b0_state_eq_WRITE)' <PC25>
+p3 -> p0 { MI_b0_state_eq_WRITE__1 = 0 &&  
+        havoc() }
+
+// <cpost_conn_handle_read_without_err> -> 'assert(b0_state_eq_WRITE)' <l1_cpost_conn_handle_read>
+p3 -> p4 { MI_b0_state_eq_WRITE__1 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_handle_read> -> 'e'
+p4 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+       	havoc(done) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_dispatcher_without_err
+// <PC31> -> 'cpost_conn_handle_read' <PC32>
+// <PC32> -> 'b0_state_eq_WRITE := F' <PC33>
+// <PC33> -> 'b1_ev_eq_TO_SEND := F' <PC34>
+// <PC34> -> 'assert(!*)' <PC40>
+// <PC34> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+// <PC36> -> 'cpost_conn_handle_write' <PC37>
+// <PC37> -> 'b0_state_eq_WRITE := T' <PC38>
+// <PC38> -> 'b1_ev_eq_TO_SEND := T' <l2_cpost_conn_dispatcher>
+// <PC40> -> 'cpost_conn_dispatcher' <l3_cpost_conn_dispatcher>
+// <cpost_conn_dispatcher_without_err> -> 'assert(!*)' <PC31>
+// <cpost_conn_dispatcher_without_err> -> 'assert(*)' <l1_cpost_conn_dispatcher>
+// <l1_cpost_conn_dispatcher> -> 'assert(!*)' <PC36>
+// <l1_cpost_conn_dispatcher> -> 'assert(*)' <l2_cpost_conn_dispatcher>
+// <l2_cpost_conn_dispatcher> -> 'assert(!*)' <PC40>
+// <l2_cpost_conn_dispatcher> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+// <l3_cpost_conn_dispatcher> -> 'e'
+//----------------------------------
+traverse_cpost_conn_dispatcher_without_err_0 {
+res: int;
+out done: int;
+initial p8;
+final sf;
+
+
+
+// <PC31> -> 'cpost_conn_handle_read' <PC32>
+p0 -> p1 { CNT_cpost_conn_handle_read' = CNT_cpost_conn_handle_read + 1  &&  
+        havoc(CNT_cpost_conn_handle_read) }
+
+// <PC32> -> 'b0_state_eq_WRITE := F' <PC33>
+p1 -> p2 { MI_b0_state_eq_WRITE__0' = 0 &&  
+        havoc(MI_b0_state_eq_WRITE__0) }
+
+// <PC33> -> 'b1_ev_eq_TO_SEND := F' <PC34>
+p2 -> p3 { MI_b1_ev_eq_TO_SEND__0' = 0 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__0) }
+
+// <PC34> -> 'assert(!*)' <PC40>
+p3 -> p7 { 1 = 1 &&  
+        havoc() }
+
+// <PC34> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+p3 -> p11 { 1 = 1 &&  
+        havoc() }
+
+// <PC36> -> 'cpost_conn_handle_write' <PC37>
+p4 -> p5 { CNT_cpost_conn_handle_write' = CNT_cpost_conn_handle_write + 1  &&  
+        havoc(CNT_cpost_conn_handle_write) }
+
+// <PC37> -> 'b0_state_eq_WRITE := T' <PC38>
+p5 -> p6 { MI_b0_state_eq_WRITE__0' = 1 &&  
+        havoc(MI_b0_state_eq_WRITE__0) }
+
+// <PC38> -> 'b1_ev_eq_TO_SEND := T' <l2_cpost_conn_dispatcher>
+p6 -> p10 { MI_b1_ev_eq_TO_SEND__0' = 1 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__0) }
+
+// <PC40> -> 'cpost_conn_dispatcher' <l3_cpost_conn_dispatcher>
+p7 -> p11 { CNT_cpost_conn_dispatcher' = CNT_cpost_conn_dispatcher + 1  &&  
+        havoc(CNT_cpost_conn_dispatcher) }
+
+// <cpost_conn_dispatcher_without_err> -> 'assert(!*)' <PC31>
+p8 -> p0 { 1 = 1 &&  
+        havoc() }
+
+// <cpost_conn_dispatcher_without_err> -> 'assert(*)' <l1_cpost_conn_dispatcher>
+p8 -> p9 { 1 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_dispatcher> -> 'assert(!*)' <PC36>
+p9 -> p4 { 1 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_dispatcher> -> 'assert(*)' <l2_cpost_conn_dispatcher>
+p9 -> p10 { 1 = 1 &&  
+        havoc() }
+
+// <l2_cpost_conn_dispatcher> -> 'assert(!*)' <PC40>
+p10 -> p7 { 1 = 1 &&  
+        havoc() }
+
+// <l2_cpost_conn_dispatcher> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+p10 -> p11 { 1 = 1 &&  
+        havoc() }
+
+// <l3_cpost_conn_dispatcher> -> 'e'
+p11 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__0 = MF_b0_state_eq_WRITE__0 && MI_b1_ev_eq_TO_SEND__0 = MF_b1_ev_eq_TO_SEND__0 && 
+       	havoc(done) }
+
+
+}
+
+//----------------------------------
+// Grammar of cpost_conn_dispatcher_without_err
+// <PC31> -> 'cpost_conn_handle_read' <PC32>
+// <PC32> -> 'b0_state_eq_WRITE := F' <PC33>
+// <PC33> -> 'b1_ev_eq_TO_SEND := F' <PC34>
+// <PC34> -> 'assert(!*)' <PC40>
+// <PC34> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+// <PC36> -> 'cpost_conn_handle_write' <PC37>
+// <PC37> -> 'b0_state_eq_WRITE := T' <PC38>
+// <PC38> -> 'b1_ev_eq_TO_SEND := T' <l2_cpost_conn_dispatcher>
+// <PC40> -> 'cpost_conn_dispatcher' <l3_cpost_conn_dispatcher>
+// <cpost_conn_dispatcher_without_err> -> 'assert(!*)' <PC31>
+// <cpost_conn_dispatcher_without_err> -> 'assert(*)' <l1_cpost_conn_dispatcher>
+// <l1_cpost_conn_dispatcher> -> 'assert(!*)' <PC36>
+// <l1_cpost_conn_dispatcher> -> 'assert(*)' <l2_cpost_conn_dispatcher>
+// <l2_cpost_conn_dispatcher> -> 'assert(!*)' <PC40>
+// <l2_cpost_conn_dispatcher> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+// <l3_cpost_conn_dispatcher> -> 'e'
+//----------------------------------
+traverse_cpost_conn_dispatcher_without_err_1 {
+res: int;
+out done: int;
+initial p8;
+final sf;
+
+
+
+// <PC31> -> 'cpost_conn_handle_read' <PC32>
+p0 -> p1 { CNT_cpost_conn_handle_read' = CNT_cpost_conn_handle_read + 1  &&  
+        havoc(CNT_cpost_conn_handle_read) }
+
+// <PC32> -> 'b0_state_eq_WRITE := F' <PC33>
+p1 -> p2 { MI_b0_state_eq_WRITE__1' = 0 &&  
+        havoc(MI_b0_state_eq_WRITE__1) }
+
+// <PC33> -> 'b1_ev_eq_TO_SEND := F' <PC34>
+p2 -> p3 { MI_b1_ev_eq_TO_SEND__1' = 0 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__1) }
+
+// <PC34> -> 'assert(!*)' <PC40>
+p3 -> p7 { 1 = 1 &&  
+        havoc() }
+
+// <PC34> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+p3 -> p11 { 1 = 1 &&  
+        havoc() }
+
+// <PC36> -> 'cpost_conn_handle_write' <PC37>
+p4 -> p5 { CNT_cpost_conn_handle_write' = CNT_cpost_conn_handle_write + 1  &&  
+        havoc(CNT_cpost_conn_handle_write) }
+
+// <PC37> -> 'b0_state_eq_WRITE := T' <PC38>
+p5 -> p6 { MI_b0_state_eq_WRITE__1' = 1 &&  
+        havoc(MI_b0_state_eq_WRITE__1) }
+
+// <PC38> -> 'b1_ev_eq_TO_SEND := T' <l2_cpost_conn_dispatcher>
+p6 -> p10 { MI_b1_ev_eq_TO_SEND__1' = 1 &&  
+        havoc(MI_b1_ev_eq_TO_SEND__1) }
+
+// <PC40> -> 'cpost_conn_dispatcher' <l3_cpost_conn_dispatcher>
+p7 -> p11 { CNT_cpost_conn_dispatcher' = CNT_cpost_conn_dispatcher + 1  &&  
+        havoc(CNT_cpost_conn_dispatcher) }
+
+// <cpost_conn_dispatcher_without_err> -> 'assert(!*)' <PC31>
+p8 -> p0 { 1 = 1 &&  
+        havoc() }
+
+// <cpost_conn_dispatcher_without_err> -> 'assert(*)' <l1_cpost_conn_dispatcher>
+p8 -> p9 { 1 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_dispatcher> -> 'assert(!*)' <PC36>
+p9 -> p4 { 1 = 1 &&  
+        havoc() }
+
+// <l1_cpost_conn_dispatcher> -> 'assert(*)' <l2_cpost_conn_dispatcher>
+p9 -> p10 { 1 = 1 &&  
+        havoc() }
+
+// <l2_cpost_conn_dispatcher> -> 'assert(!*)' <PC40>
+p10 -> p7 { 1 = 1 &&  
+        havoc() }
+
+// <l2_cpost_conn_dispatcher> -> 'assert(*)' <l3_cpost_conn_dispatcher>
+p10 -> p11 { 1 = 1 &&  
+        havoc() }
+
+// <l3_cpost_conn_dispatcher> -> 'e'
+p11 -> sf {  done' = 1 &&
+       	MI_b0_state_eq_WRITE__1 = MF_b0_state_eq_WRITE__1 && MI_b1_ev_eq_TO_SEND__1 = MF_b1_ev_eq_TO_SEND__1 && 
+       	havoc(done) }
+
+
+}
+
+

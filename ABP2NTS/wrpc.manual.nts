@@ -1,6 +1,6 @@
 /*
 Licensed under the MIT License.
-Copyright (C) 2012 EPFL (Switzerland) , Verimag (France).
+Copyright (C) 2012 EPFL (Switzerland) , Verimag (France), IMDEA Software (Spain).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -11,7 +11,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 nts pgm;
 
 // Global Decls
-n, sent, recv, CNT_wrpc, CNT_rpccall: int; 
+n, w, sent, recv, CNT_wrpc, CNT_rpccall: int; 
+//par w: int; not supported
+// FLATA fails for parametric w and succeed when w is instantiated to some positive integer
 
 main {
 
@@ -19,7 +21,7 @@ initial si;
 final sf;
 error se;
 
-si -> sinit { n' >= 1 && sent' = 0 && recv' = 0 && CNT_wrpc' = 0 && CNT_rpccall' = 0 && havoc(n, sent, recv, CNT_wrpc, CNT_rpccall)}
+si -> sinit { n' >= 1 && n' >= w' && w' >= 1  && sent' = 0 && recv' = 0 && CNT_wrpc' = 0 && CNT_rpccall' = 0 && havoc(n, w, sent, recv, CNT_wrpc, CNT_rpccall)}
 
 // post_wrpc() in main()
 sinit -> seventloop { CNT_wrpc' = CNT_wrpc + 1 && havoc(CNT_wrpc) }
@@ -41,11 +43,11 @@ sw1 -> seventloop { recv >= n && havoc() }
 sw1 -> sw2 { recv+1 <= n && havoc() }
 
 // innermost if expr holds; post_rpccall(): ++sent;
-sw2 -> swendif { sent+1 <= n && sent - recv <= 1 && CNT_rpccall' = CNT_rpccall + 1 && sent' = sent + 1 && havoc(CNT_rpccall, sent) }
+sw2 -> swendif { sent+1 <= n && sent - recv <= w && CNT_rpccall' = CNT_rpccall + 1 && sent' = sent + 1 && havoc(CNT_rpccall, sent) }
 
 // innermost if expr fails
 sw2 -> swendif { sent >= n  && havoc() }
-sw2 -> swendif { sent - recv >= 2 && havoc() }
+sw2 -> swendif { sent - recv >= w+1 && havoc() }
 
 // post_wrpc() in post_wrpc()
 swendif -> seventloop { CNT_wrpc' = CNT_wrpc + 1 && havoc(CNT_wrpc) }
