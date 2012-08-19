@@ -1,0 +1,54 @@
+/*
+Licensed under the MIT License.
+Copyright (C) 2012 EPFL (Switzerland) , Verimag (France), IMDEA Software (Spain).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+nts pgm;
+
+// Global Decls
+num, len, written, CNT_server, CNT_service_req: int; 
+
+main {
+
+initial si;
+final sf;
+error se;
+
+si -> sinit { CNT_server' = 0 && CNT_service_req' = 0 && havoc(CNT_server, CNT_service_req)}
+
+// post_server() in main()
+sinit -> seventloop { CNT_server' = CNT_server + 1 && havoc(CNT_server) }
+
+seventloop -> sserverdispatch { CNT_server >= 1 && CNT_server' = CNT_server - 1 && havoc(CNT_server)}
+
+seventloop -> sservice_reqdispatch { CNT_service_req >= 1 && CNT_service_req' = CNT_service_req - 1 && havoc(CNT_service_req) }
+
+// server data initialization 
+sserverdispatch -> sserv1 { len' >= 1 && written' = 0 && havoc(len,written) } 
+// post_service_req and return (= go back to the event loop)
+serv1 -> seventloop { CNT_service_req' = CNT_service_req+1 && havoc(CNT_service_req) }
+
+// assertion failure
+sservice_reqdispatch -> se { written <= -1 && havoc() }
+// assertion success
+sservice_reqdispatch -> sr1 { written >= 0 && havoc() }
+
+// read some number of bits, it can be anything between 0 and what's left to read
+sr1 -> sr2 { num' >= 0 && len - written >= num' && havoc(num) }
+
+// if read failed, post_service_req and return (= go back to event loop)
+sr2 -> seventloop { num <= 0 && CNT_service_req' = CNT_service_req + 1 && havoc(CNT_service_req) } 
+// else
+sr2 -> sr_readsuccess { num >= 1 && written' = written + num && havoc(written) }
+
+// if read finished then return
+sr_readsuccess -> seventloop { len = written && havoc() }
+// else post_service_req and return (= go back to event loop)
+sr_readsuccess -> seventloop { len != written && CNT_service_req' = CNT_service_req +1 && havoc(CNT_service_req) }
+
+}
